@@ -9,3 +9,13 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model State {
+  id             String       @id @default(uuid())
+  code           Int          @unique 
+  uf             String       @unique @db.VarChar(2)
+  name           String       @unique
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
