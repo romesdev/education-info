@@ -10,12 +10,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model State {
   id             String       @id @default(uuid())
   code           Int          @unique 
   uf             String       @unique @db.VarChar(2)
-  name           String       @unique
+  name           String       
+  cities         City[]
+  region         String
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 }
+
+model City {
+  id             String       @id @default(uuid())
+  code           String          @unique 
+  name           String       
+  state          State        @relation(fields: [stateId], references: [id])
+  stateId        String 
+  area           String
+  schools        School[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model School {
+  id             String       @id @default(uuid())
+  code           String       @unique 
+  name           String       
+  city           City         @relation(fields: [cityId], references: [id])
+  cityId         String
+  adminType      String
+  localType      String
+  indicators     Indicator[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Indicator {
+  id             String       @id @default(uuid())
+  average        Float 
+  quantity       Int 
+  classification Int 
+  year           Int 
+  school         School  @relation(fields: [schoolId], references: [id])
+  schoolId       String
+  levelOne       Float
+  levelTwo       Float
+  levelThree     Float
+  levelFour      Float
+  levelFive      Float
+  levelSix       Float
+  levelSeven     Float
+  levelEight     Float
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+

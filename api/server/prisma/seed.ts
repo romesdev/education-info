@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+
 import { states } from './data/states';
 const prisma = new PrismaClient();
 
