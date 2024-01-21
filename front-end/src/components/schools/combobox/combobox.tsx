@@ -49,7 +49,7 @@ export function Combobox({ data, width = 200, placeholder, onValueChange }: Comb
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className={`w-[${width}rem] p-0 bg-blue-600`}>
+            <PopoverContent className={`w-[${width}rem] p-0 bg-blue-600 overflow-y-auto max-h-64`}>
                 <Command>
                     <CommandInput placeholder={placeholder} />
                     <CommandEmpty>Nenhum {placeholder.toLowerCase()} encontrado.</CommandEmpty>

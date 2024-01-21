@@ -66,7 +66,7 @@ export default function SchoolPage() {
                     <SelectTrigger className="w-[100px]">
                         <SelectValue placeholder="Nível" />
                     </SelectTrigger>
-                    <SelectContent className="bg-blue-600">
+                    <SelectContent className="bg-blue-600 overflow-y-auto max-h-48">
                         <SelectGroup>
                             <SelectLabel>Níveis</SelectLabel>
                             <SelectItem value="1">I</SelectItem>
