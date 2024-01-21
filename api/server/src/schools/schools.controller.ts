@@ -71,11 +71,11 @@ export class SchoolsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSchoolDto: UpdateSchoolDto) {
-    return this.schoolsService.update(+id, updateSchoolDto);
+    return this.schoolsService.update(id, updateSchoolDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.schoolsService.remove(+id);
+    return this.schoolsService.remove(id);
   }
 }

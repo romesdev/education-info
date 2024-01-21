@@ -49,11 +49,20 @@ export class CityService {
     });
   }
 
-  update(id: number, updateCityDto: UpdateCityDto) {
-    return `This action updates a #${id} city`;
+  update(id: string, updateCityDto: UpdateCityDto) {
+    return this.prisma.city.update({
+      where: {
+        id: id,
+      },
+      data: updateCityDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} city`;
+  remove(id: string) {
+    return this.prisma.city.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 }

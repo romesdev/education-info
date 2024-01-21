@@ -16,6 +16,7 @@ import { PaginatedOutputDto } from '../utils/pagination/dto/paginatedOutput.dto'
 import { createPaginator } from 'prisma-pagination';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { UpdateStateDto } from './dto/update-state.dto';
 
 @Controller('states')
 @ApiTags('states')
@@ -35,5 +36,15 @@ export class StatesController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.statesService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateStateDto: UpdateStateDto) {
+    return this.statesService.update(id, updateStateDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.statesService.remove(id);
   }
 }

@@ -4,10 +4,12 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { School, SchoolTable, columns, State } from "./columns"
 import { DataTable } from "./data-table"
 import useSWR from 'swr'
-import React, { useContext } from "react"
+import React from "react"
+import { Label } from "@/components/ui/label"
+
 import { InputSearch } from "../search/search"
-import { tt } from "@/App"
-import { useSearchParams } from 'react-router-dom';
+// import { tt } from "@/App"
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from "../ui/button"
 
 function getData(): SchoolTable[] {
@@ -55,17 +57,15 @@ function getData(): SchoolTable[] {
 const levelsStrings = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII']
 
 
-const mapSchoolToRow = (data: any) => {
-    if (data) {
+const mapSchoolToRow = (data: any, states: State[]) => {
+    if (data && states) {
         return data.data.map((item) => {
             console.log(item)
+            const uf = states.filter((state) => state.id === item.city.stateId)[0].uf
             return {
-                id: item.id,
-                code: item.code,
-                name: item.name,
-                adminType: item.adminType,
-                local: item.city.name,
-                level: item.indicators.length > 0 ? levelsStrings[item.indicators[0].classification - 1] : 'N/A'
+                ...item,
+                local: `${item.city.name}/${uf}`,
+                classification: item.indicators.length > 0 ? levelsStrings[item.indicators[0].classification - 1] : 'N/A'
             }
         })
     }
@@ -88,6 +88,9 @@ const initialParams = { page: "1", perPage: "5" };
 
 
 export default function SchoolPage() {
+    // const { state: stateParams } = useLocation()
+    // console.log('STATE PARAMS: ', stateParams.filter)
+    // const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams(new URLSearchParams(initialParams));
 
     // const { fnX } = useContext(tt)
@@ -110,10 +113,39 @@ export default function SchoolPage() {
         setSearchParams(searchParams)
     }
 
+    function filteringItemsByCityName(value: string) {
+        searchParams.set("city", value)
+        setSearchParams(searchParams)
+    }
+
     function nextPage(value: string) {
         searchParams.set("page", value)
         setSearchParams(searchParams)
     }
+
+    function changeSort(value: string) {
+        searchParams.set("direction", value)
+        setSearchParams(searchParams)
+    }
+
+    // function navigation() {
+    //     const params = {};
+
+    //     console.log(searchParams)
+
+    //     searchParams.forEach((value, key) => {
+    //         console.log('for: ', key, value)
+    //         params[key] = value;
+    //     });
+
+    //     console.log(params)
+
+    //     navigate('/registro', {
+    //         replace: true, state: {
+    //             filter: params,
+    //         }
+    //     })
+    // }
 
     console.log(searchParams.toString())
 
@@ -124,7 +156,7 @@ export default function SchoolPage() {
 
     console.log(data)
 
-    const dataTable = mapSchoolToRow(data)
+    const dataTable = mapSchoolToRow(data, payloadStates)
 
     console.log(dataTable)
     const dataStates = mapStateToStateCombobox(payloadStates)
@@ -132,9 +164,19 @@ export default function SchoolPage() {
 
     return (
         <div className="container mx-auto py-10">
-            <h1>Indicadores das escolas INSE</h1>
-            <InputSearch onSearchValue={filteringItemsBySearchName} />
-            <div className="flex-auto w-64"> </div>
+            <Label className="text-right text-lg">Indicadores das escolas INSE</Label>
+            <InputSearch label={"nome"} onSearchValue={filteringItemsBySearchName} />
+            <InputSearch label={"cidade"} onSearchValue={filteringItemsByCityName} />
+            {/* <div>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={navigation}
+                >
+                    CADASTRAR
+                </Button>
+            </div> */}
+
             <Select onValueChange={filteringItemsByLevel}>
                 <SelectTrigger className="w-[100px]">
                     <SelectValue placeholder="Nível" />
@@ -153,12 +195,26 @@ export default function SchoolPage() {
                     </SelectGroup>
                 </SelectContent>
             </Select>
+
+            <Select onValueChange={changeSort}>
+                <SelectTrigger className="w-[100px]">
+                    <SelectValue placeholder="Ordenação" />
+                </SelectTrigger>
+                <SelectContent className="bg-blue-600">
+                    <SelectGroup>
+                        <SelectLabel>Ordernação</SelectLabel>
+                        <SelectItem value="asc">ASC</SelectItem>
+                        <SelectItem value="desc">DESC</SelectItem>
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+
+
             <Combobox data={dataStates} label='Estado' placeholder="Estado" width={2.5} onValueChange={filteringItemsByUF}></Combobox>
             <Button type="button" onClick={(e) => {
                 e.preventDefault()
-                setSearchParams("")
+                setSearchParams({})
             }}>Limpar busca</Button>
-            {/* <ComboboxState placeholder="Estado" width={2.5}></ComboboxState> */}
             <DataTable columns={columns} data={dataTable} />
             <div className="flex items-center justify-end space-x-2 py-4">
                 <Button
@@ -178,7 +234,7 @@ export default function SchoolPage() {
                     Próxima
                 </Button>
             </div >
-        </div>
+        </div >
     )
 
 }

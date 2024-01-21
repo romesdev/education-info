@@ -42,11 +42,11 @@ export class IndicatorsController {
     @Param('id') id: string,
     @Body() updateIndicatorDto: UpdateIndicatorDto,
   ) {
-    return this.indicatorsService.update(+id, updateIndicatorDto);
+    return this.indicatorsService.update(id, updateIndicatorDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.indicatorsService.remove(+id);
+    return this.indicatorsService.remove(id);
   }
 }

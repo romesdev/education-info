@@ -34,11 +34,20 @@ export class IndicatorsService {
     });
   }
 
-  update(id: number, updateIndicatorDto: UpdateIndicatorDto) {
-    return `This action updates a #${id} indicator`;
+  update(id: string, updateIndicatorDto: UpdateIndicatorDto) {
+    return this.prisma.indicator.update({
+      where: {
+        id: id,
+      },
+      data: updateIndicatorDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} indicator`;
+  remove(id: string) {
+    return this.prisma.indicator.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 }

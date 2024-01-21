@@ -2,18 +2,22 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { MoreHorizontal } from "lucide-react"
+import { MoreHorizontal, School } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { DropdownMenunActions } from "./row-actions"
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import useSWR from "swr"
+import { BASE_URL } from "@/utils/utils"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -21,6 +25,7 @@ export type School = {
     id: string
     code: string
     name: string
+    local: string
     city: City
     adminType: "Federal" | "Estadual" | "Municipal"
     localType: "Urbana" | "Rural"
@@ -68,7 +73,7 @@ export type Indicator = {
     levelEight: number
 }
 
-export const columns: ColumnDef<SchoolTable>[] = [
+export const columns: ColumnDef<School>[] = [
     {
         accessorKey: "code",
         header: "Código",
@@ -82,11 +87,159 @@ export const columns: ColumnDef<SchoolTable>[] = [
         header: "Local",
     },
     {
-        accessorKey: "level",
+        accessorKey: "classification",
         header: "Nível",
     },
     {
         id: "actions",
-        cell: ({ row }) => <DropdownMenunActions />,
+        cell: ({ row }) => {
+
+            const school = row.original
+            console.log('school row:', school)
+
+            // useSWR(`BASE_URL/schools/${school.id}`, )
+
+            return (
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="outline">Ver</Button>
+                    </DialogTrigger >
+                    <DialogContent className="sm:max-w-[425px] bg-blue-600 ml-14 content-center ">
+                        <DialogHeader>
+                            <DialogTitle>{school.name}</DialogTitle>
+                            <DialogDescription className="">
+                                <div className="flex flex-wrap gap-16">
+                                    <Label className="text-right">
+                                        {school.code}
+                                    </Label>
+                                    <Label className="text-right">
+                                        Administração {school.adminType}
+                                    </Label>
+                                </div>
+
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="my-4">
+                                <Label className="text-right text-lg">
+                                    Localização
+                                </Label>
+                                <div className="flex gap-8">
+                                    <Label className="text-right">
+                                        {school.local}
+                                    </Label>
+                                    <Label className="text-right">
+                                        {school.city.area}
+                                    </Label>
+                                    <Label className="text-right">
+                                        {school.localType}
+                                    </Label>
+                                </div>
+
+
+
+
+                            </div>
+
+                            <div className="">
+                                <Label className="text-right text-lg">
+                                    INSE {school.indicators[0]?.year}
+                                </Label>
+                            </div>
+                            <div>
+                                <Label className="text-right text-lg">
+                                    Indicadores
+                                </Label>
+                            </div>
+                            <div className="flex gap-8">
+                                <Label className="text-right">
+                                    Nível
+                                </Label>
+                                <Label className="text-right">
+                                    Média
+                                </Label>
+                                <Label className="text-right">
+                                    Quantidade de alunos
+                                </Label>
+                            </div>
+                            <div className="flex gap-16 ">
+                                <Label className="text-right ml-1">
+                                    {school.indicators[0]?.classification}
+                                </Label>
+                                <Label className="text-right">
+                                    {school.indicators[0]?.average}
+                                </Label>
+                                <Label className="text-right">
+                                    {school.indicators[0]?.quantity}
+                                </Label>
+                            </div>
+                            <div>
+                                <Label className="text-right text-lg">
+                                    Alunos por nível
+                                </Label>
+                            </div>
+                            <div className="flex gap-8">
+                                <Label className="text-right">
+                                    Nível I
+                                </Label>
+                                <Label className="text-right">
+                                    Nível II
+                                </Label>
+                                <Label className="text-right">
+                                    Nível III
+                                </Label>
+                                <Label className="text-right">
+                                    Nível IV
+                                </Label>
+                            </div>
+                            <div className="flex gap-12">
+                                <Label className="text-right ml-1">
+                                    {school.indicators[0]?.levelOne}%
+                                </Label>
+                                <Label className="text-right">
+                                    {school.indicators[0]?.levelTwo}%
+                                </Label>
+                                <Label className="text-right">
+                                    {school.indicators[0]?.levelThree}%
+                                </Label>
+                                <Label className="text-right">
+                                    {school.indicators[0]?.levelFour}%
+                                </Label>
+                            </div>
+                            <div className="flex gap-8">
+                                <Label className="text-right">
+                                    Nível V
+                                </Label>
+                                <Label className="text-right">
+                                    Nível VI
+                                </Label>
+                                <Label className="text-right">
+                                    Nível VII
+                                </Label>
+                                <Label className="text-right">
+                                    Nível VIII
+                                </Label>
+                            </div>
+                            <div className="flex gap-14">
+                                <Label className="text-right">
+                                    {school.indicators[0]?.levelFive}%
+                                </Label>
+                                <Label className="text-right">
+                                    {school.indicators[0]?.levelSix}%
+                                </Label>
+                                <Label className="text-right">
+                                    {school.indicators[0]?.levelSeven}%
+                                </Label>
+                                <Label className="text-right">
+                                    {school.indicators[0]?.levelEight}%
+                                </Label>
+                            </div>
+                        </div>
+                        <DialogFooter>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog >
+            )
+        }
     },
 ]

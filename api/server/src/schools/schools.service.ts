@@ -88,7 +88,8 @@ export class SchoolsService {
     //   orderBy = { [orderByKey]: orderByValue };
     // }
 
-    console.log(where);
+    console.log('indicators', indicatorsWhere);
+    console.log('where', where);
 
     // return this.prisma.school.findMany();
 
@@ -98,15 +99,16 @@ export class SchoolsService {
         where: where,
         include: {
           indicators: {
+            where: indicatorsWhere,
             orderBy: {
               classification: direction === 'asc' ? 'asc' : 'desc',
             },
-            where: indicatorsWhere,
           },
           city: true,
         },
-        take: perPage,
-        skip: (page - 1) * perPage,
+        orderBy: {
+          name: direction === 'asc' ? 'asc' : 'desc',
+        },
       },
       {
         page,
@@ -218,11 +220,16 @@ export class SchoolsService {
     });
   }
 
-  update(id: number, updateSchoolDto: UpdateSchoolDto) {
-    return `This action updates a #${id} school`;
+  update(id: string, updateSchoolDto: UpdateSchoolDto) {
+    return this.prisma.school.update({
+      where: {
+        id: id,
+      },
+      data: updateSchoolDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} school`;
+  remove(id: string) {
+    return this.prisma.school.delete({ where: { id: id } });
   }
 }

@@ -44,11 +44,11 @@ export class CityController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCityDto: UpdateCityDto) {
-    return this.cityService.update(+id, updateCityDto);
+    return this.cityService.update(id, updateCityDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.cityService.remove(+id);
+    return this.cityService.remove(id);
   }
 }
