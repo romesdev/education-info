@@ -1,4 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsIn, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export type OrderBy = { key: string; direction: string };
 
@@ -9,18 +11,38 @@ export type Where = {
 };
 
 export class FilterDto {
+  @IsOptional()
+  @Transform(({ value }) => {
+    return Number(value);
+  })
+  @ApiProperty()
+  page: number = 1;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    return Number(value);
+  })
+  @ApiProperty()
+  perPage: number = 10;
+
+  @IsOptional()
   @ApiProperty()
   search?: string;
 
+  @IsOptional()
   @ApiProperty()
-  whereByKey?: string;
+  city?: string;
 
+  @IsOptional()
   @ApiProperty()
-  whereByValue?: string | number;
+  state?: string;
 
+  @IsOptional()
   @ApiProperty()
-  orderByKey?: string;
+  level?: string;
 
+  @IsOptional()
+  @IsIn(['asc', 'desc'])
   @ApiProperty()
-  orderByValue?: string;
+  direction?: string = 'asc';
 }

@@ -3,6 +3,9 @@ import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FilterDto } from './dto/filter.dto';
+import { Prisma } from '@prisma/client';
+import { School } from './entities/school.entity';
+import { createPaginator } from 'prisma-pagination';
 
 @Injectable()
 export class SchoolsService {
@@ -12,10 +15,8 @@ export class SchoolsService {
     return this.prisma.school.create({ data: createSchoolDto });
   }
 
-  findAll(take: number) {
+  findAll() {
     return this.prisma.school.findMany({
-      skip: 2,
-      take: take,
       include: {
         indicators: true,
         city: true,
@@ -24,11 +25,13 @@ export class SchoolsService {
   }
 
   findWhere(query: FilterDto) {
-    const { search, orderByKey, orderByValue, whereByKey, whereByValue } =
-      query;
+    const { search, state, city, level, direction, page, perPage } = query;
     console.log(query);
     let where = {};
-    let orderBy = {};
+    let cityWhere = {};
+    let indicatorsWhere = {};
+
+    const paginate = createPaginator({ perPage: perPage });
 
     if (search) {
       where = {
@@ -37,29 +40,75 @@ export class SchoolsService {
           mode: 'insensitive',
         },
       };
+    }
+    if (city) {
+      cityWhere = {
+        name: {
+          contains: city,
+          mode: 'insensitive',
+        },
+      };
 
-      if (whereByKey !== null && whereByValue != null) {
-        where = {
-          ...where,
-          [whereByKey]: {
-            equals: whereByValue,
+      where = {
+        ...where,
+        city: cityWhere,
+      };
+    }
+
+    if (state) {
+      where = {
+        ...where,
+        city: {
+          ...cityWhere,
+          state: {
+            uf: state,
           },
-        };
-      }
+        },
+      };
     }
 
-    if (orderByKey !== null && orderByValue !== null) {
-      orderBy = { [orderByKey]: orderByValue };
+    if (level) {
+      const levelNumber = Number(level);
+      where = {
+        ...where,
+        indicators: {
+          some: {
+            classification: levelNumber,
+          },
+        },
+      };
+
+      indicatorsWhere = {
+        classification: levelNumber,
+      };
     }
 
-    return this.prisma.school.findMany({
-      where: where,
-      include: {
-        indicators: true,
-        city: true,
+    // if (orderByKey !== null && orderByValue !== null) {
+    //   orderBy = { [orderByKey]: orderByValue };
+    // }
+
+    console.log(where);
+
+    // return this.prisma.school.findMany();
+
+    return paginate<School, Prisma.SchoolFindManyArgs>(
+      this.prisma.school,
+      {
+        where: where,
+        include: {
+          indicators: {
+            orderBy: {
+              classification: direction === 'asc' ? 'asc' : 'desc',
+            },
+            where: indicatorsWhere,
+          },
+          city: true,
+        },
       },
-      orderBy,
-    });
+      {
+        page,
+      },
+    );
   }
 
   async findByCity(city: string) {

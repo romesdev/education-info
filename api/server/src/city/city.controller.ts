@@ -10,8 +10,10 @@ import {
 import { CityService } from './city.service';
 import { CreateCityDto } from './dto/create-city.dto';
 import { UpdateCityDto } from './dto/update-city.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('city')
+@ApiTags('cities')
 export class CityController {
   constructor(private readonly cityService: CityService) {}
 

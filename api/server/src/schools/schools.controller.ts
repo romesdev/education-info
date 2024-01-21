@@ -12,8 +12,13 @@ import { SchoolsService } from './schools.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
 import { FilterDto } from './dto/filter.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { School } from './entities/school.entity';
+import { ApiPaginatedResponse } from '../utils/custom-decorators/PaginationDecorator';
+import { PaginatedOutputDto } from '../utils/pagination/dto/paginatedOutput.dto';
 
 @Controller('schools')
+@ApiTags('schools')
 export class SchoolsController {
   constructor(private readonly schoolsService: SchoolsService) {}
 
@@ -23,13 +28,16 @@ export class SchoolsController {
   }
 
   @Get()
-  findAll(@Query('take') take: number) {
-    return this.schoolsService.findAll(+take);
+  findAll() {
+    return this.schoolsService.findAll();
   }
 
   @Get('filter/')
-  findWhere(@Query() filterDTO: FilterDto) {
-    return 'TODO';
+  @ApiPaginatedResponse(School)
+  findWhere(
+    @Query() filterDTO: FilterDto,
+  ): Promise<PaginatedOutputDto<School>> {
+    return this.schoolsService.findWhere(filterDTO);
   }
 
   @Get('findByCity/:city')
