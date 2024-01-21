@@ -7,29 +7,8 @@ import { Prisma, State } from '@prisma/client';
 export class StatesService {
   constructor(private prisma: PrismaService) {}
 
-  findAll(page: number, perPage: number, region: string, direction: string) {
-    const paginate = createPaginator({ perPage: perPage });
-
-    let where = {};
-
-    if (region !== '') {
-      where = {
-        region: region,
-      };
-    }
-
-    return paginate<State, Prisma.StateFindManyArgs>(
-      this.prisma.state,
-      {
-        where: where,
-        orderBy: {
-          code: 'asc',
-        },
-      },
-      {
-        page,
-      },
-    );
+  findAll() {
+    return this.prisma.state.findMany();
   }
 
   findByCode(code: number) {

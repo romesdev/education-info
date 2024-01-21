@@ -68,7 +68,7 @@ export function Combobox({ data, width = 200, placeholder, onValueChange }: Comb
                 >
                     {value
                         ? data.find((item) => item.value.toLowerCase() === value.toLowerCase())?.label
-                        : `Selecione um ${placeholder.toLowerCase()}`}
+                        : `${placeholder}`}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>

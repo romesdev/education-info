@@ -23,17 +23,8 @@ export class StatesController {
   constructor(private readonly statesService: StatesService) {}
 
   @Get()
-  @ApiPaginatedResponse(State)
-  findAll(
-    @Query('page') page: number = 1,
-    @Query('perPage') perPage: number = 10,
-    @Query('region') region?: string,
-    @Query('direction') direction: string = 'asc',
-
-    // @Query('perPage') perPage: number = 10,
-    // @Query('perPage') perPage: number = 10,
-  ): Promise<PaginatedOutputDto<State>> {
-    return this.statesService.findAll(page, perPage, region, direction);
+  findAll() {
+    return this.statesService.findAll();
   }
 
   @Get('findByCode/:code')

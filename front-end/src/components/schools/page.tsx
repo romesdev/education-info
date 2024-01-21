@@ -5,10 +5,10 @@ import { School, SchoolTable, columns, State } from "./columns"
 import { DataTable } from "./data-table"
 import useSWR from 'swr'
 import React, { useContext } from "react"
-import { Input } from "../ui/input"
-import { InputSearch, InputWithButton } from "../search/search"
+import { InputSearch } from "../search/search"
 import { tt } from "@/App"
-
+import { useSearchParams } from 'react-router-dom';
+import { Button } from "../ui/button"
 
 function getData(): SchoolTable[] {
     // Fetch data from your API here.
@@ -55,9 +55,9 @@ function getData(): SchoolTable[] {
 const levelsStrings = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII']
 
 
-const mapSchoolToRow = (schools: School[]) => {
-    if (schools) {
-        return schools.map((item) => {
+const mapSchoolToRow = (data: any) => {
+    if (data) {
+        return data.data.map((item) => {
             console.log(item)
             return {
                 id: item.id,
@@ -75,7 +75,6 @@ const mapSchoolToRow = (schools: School[]) => {
 const mapStateToStateCombobox = (states: State[]) => {
     if (states) {
         return states.map((item) => {
-            console.log(item)
             return {
                 label: item.uf,
                 value: item.uf,
@@ -85,28 +84,38 @@ const mapStateToStateCombobox = (states: State[]) => {
     return []
 }
 
+const initialParams = { page: "1", perPage: "5" };
+
 
 export default function SchoolPage() {
-    const { fnX } = useContext(tt)
-    const [filter, setFilter] = React.useState("")
-    const { data: payloadSchools, error: errorSchools, isLoading: isLoadingSchools } = useSWR(`${BASE_URL}schools?take=1`, fetcher)
+    const [searchParams, setSearchParams] = useSearchParams(new URLSearchParams(initialParams));
+
+    // const { fnX } = useContext(tt)
+    // const [filter, setFilter] = React.useState("")
+    const { data: payloadSchools, error: errorSchools, isLoading: isLoadingSchools } = useSWR(`${BASE_URL}schools/filter?${searchParams.toString()}`, fetcher)
     const { data: payloadStates } = useSWR(BASE_URL + 'states', fetcher)
 
     function filteringItemsByUF(value: string) {
-        console.log('here:', value)
-        setFilter(`findByUF/${value.toUpperCase()}`)
+        searchParams.set("state", value)
+        setSearchParams(searchParams)
     }
 
     function filteringItemsByLevel(value: string) {
-        setFilter(`findByLevel/${value}`)
+        searchParams.set("level", value)
+        setSearchParams(searchParams)
     }
 
     function filteringItemsBySearchName(value: string) {
-        if (value === "") return
-        setFilter(`findByName/${value}`)
+        searchParams.set("search", value)
+        setSearchParams(searchParams)
     }
 
-    console.log(filter)
+    function nextPage(value: string) {
+        searchParams.set("page", value)
+        setSearchParams(searchParams)
+    }
+
+    console.log(searchParams.toString())
 
     console.log('data', payloadSchools)
     console.log('err', errorSchools)
@@ -114,9 +123,6 @@ export default function SchoolPage() {
     const data = payloadSchools ? payloadSchools : undefined;
 
     console.log(data)
-
-    if (errorSchools) return <div>falhou ao carregar</div>
-    // if (isLoadingSchools) return <div>carregando...</div>
 
     const dataTable = mapSchoolToRow(data)
 
@@ -126,10 +132,12 @@ export default function SchoolPage() {
 
     return (
         <div className="container mx-auto py-10">
+            <h1>Indicadores das escolas INSE</h1>
             <InputSearch onSearchValue={filteringItemsBySearchName} />
+            <div className="flex-auto w-64"> </div>
             <Select onValueChange={filteringItemsByLevel}>
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Selecione um nível" />
+                <SelectTrigger className="w-[100px]">
+                    <SelectValue placeholder="Nível" />
                 </SelectTrigger>
                 <SelectContent className="bg-blue-600">
                     <SelectGroup>
@@ -146,8 +154,30 @@ export default function SchoolPage() {
                 </SelectContent>
             </Select>
             <Combobox data={dataStates} label='Estado' placeholder="Estado" width={2.5} onValueChange={filteringItemsByUF}></Combobox>
+            <Button type="button" onClick={(e) => {
+                e.preventDefault()
+                setSearchParams("")
+            }}>Limpar busca</Button>
             {/* <ComboboxState placeholder="Estado" width={2.5}></ComboboxState> */}
             <DataTable columns={columns} data={dataTable} />
+            <div className="flex items-center justify-end space-x-2 py-4">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => nextPage(data.meta.prev)}
+                    disabled={data?.meta.prev == null ? true : false}
+                >
+                    Anterior
+                </Button>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => nextPage(data.meta.next)}
+                    disabled={data?.meta.next == null ? true : false}
+                >
+                    Próxima
+                </Button>
+            </div >
         </div>
     )
 

@@ -23,7 +23,7 @@ export class FilterDto {
     return Number(value);
   })
   @ApiProperty()
-  perPage: number = 10;
+  perPage: number = 5;
 
   @IsOptional()
   @ApiProperty()
@@ -34,15 +34,21 @@ export class FilterDto {
   city?: string;
 
   @IsOptional()
+  @Transform(({ value }) => {
+    return value.toUpperCase();
+  })
   @ApiProperty()
   state?: string;
 
   @IsOptional()
+  @Transform(({ value }) => {
+    return Number(value);
+  })
   @ApiProperty()
   level?: string;
 
   @IsOptional()
   @IsIn(['asc', 'desc'])
   @ApiProperty()
-  direction?: string = 'asc';
+  direction?: string = 'desc';
 }

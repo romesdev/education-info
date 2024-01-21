@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 import SchoolPage from './components/schools/page'
 import './styles/main.css'
+import { BrowserRouter } from 'react-router-dom'
 
 export const tt = createContext({} as {
   fnX: () => void,
@@ -13,7 +14,9 @@ function App() {
 
   return (
     <tt.Provider value={{ fnX, pp }}>
-      <SchoolPage></SchoolPage>
+      <BrowserRouter>
+        <SchoolPage></SchoolPage>
+      </BrowserRouter>
     </tt.Provider>
   )
 }

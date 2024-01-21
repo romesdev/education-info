@@ -27,6 +27,7 @@ export class SchoolsService {
   findWhere(query: FilterDto) {
     const { search, state, city, level, direction, page, perPage } = query;
     console.log(query);
+    console.log(perPage);
     let where = {};
     let cityWhere = {};
     let indicatorsWhere = {};
@@ -104,6 +105,8 @@ export class SchoolsService {
           },
           city: true,
         },
+        take: perPage,
+        skip: (page - 1) * perPage,
       },
       {
         page,
