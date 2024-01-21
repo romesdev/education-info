@@ -10,15 +10,13 @@ type InputSearchProps = {
 export function InputSearch({ onSearchValue, label }: InputSearchProps) {
     const [value, setValue] = React.useState("")
 
-    console.log(value)
-
     return (
         <div className="flex w-full max-w-sm items-center space-x-2">
             <Input type="search" placeholder={`Buscar por ${label}...`} onChange={(e) => {
                 e.preventDefault()
                 setValue(e.target.value)
             }} />
-            <Button type="button" onClick={(e) => {
+            <Button type="button" className="bg-blue-600" onClick={(e) => {
                 e.preventDefault()
                 onSearchValue(value)
             }}>Pesquisar</Button>

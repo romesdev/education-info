@@ -19,30 +19,6 @@ import {
 } from "@/components/ui/popover"
 import useSWR from "swr"
 import { BASE_URL, fetcher } from "@/utils/utils"
-import { City } from "./schools/columns"
-
-// const frameworks = [
-//     {
-//         value: "next.js",
-//         label: "Next.js",
-//     },
-//     {
-//         value: "sveltekit",
-//         label: "SvelteKit",
-//     },
-//     {
-//         value: "nuxt.js",
-//         label: "Nuxt.js",
-//     },
-//     {
-//         value: "remix",
-//         label: "Remix",
-//     },
-//     {
-//         value: "astro",
-//         label: "Astro",
-//     },
-// ]
 
 type ComboboxProps = {
     placeholder: string
@@ -55,42 +31,11 @@ export function ComboboxState({ width = 200, placeholder }: ComboboxProps) {
     const [search, setSearch] = React.useState("")
     const [formattedData, setFormattedData] = React.useState([])
 
-    const { data: currentData, isLoading } = useSWR(`${BASE_URL}city/findByName/${search}`, fetcher)
-    // console.log(currentData)
-    console.log(isLoading)
-
-    console.log(formattedData)
+    const { data: currentData } = useSWR(`${BASE_URL}city/findByName/${search}`, fetcher)
 
     React.useEffect(() => {
-        // console.log('bla')
-        // console.log(currentData)
         setFormattedData(currentData ?? [])
     }, [currentData])
-
-    // let data = []
-    // if (currentData) {
-    //     data = currentData.map((item: City) => {
-    //         return {
-    //             value: item.id,
-    //             label: item.name,
-    //         }
-    //     })
-    // }
-
-    // const teste = () => {
-    //     if (currentData) {
-
-    //         return currentData.map((item: City) => {
-    //             return {
-    //                 value: item.id,
-    //                 label: item.name,
-    //             }
-    //         })
-    //     }
-
-    //     return []
-    // }
-
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>

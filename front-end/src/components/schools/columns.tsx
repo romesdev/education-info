@@ -2,8 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { MoreHorizontal, School } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -14,64 +12,9 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import useSWR from "swr"
-import { BASE_URL } from "@/utils/utils"
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type School = {
-    id: string
-    code: string
-    name: string
-    local: string
-    city: City
-    adminType: "Federal" | "Estadual" | "Municipal"
-    localType: "Urbana" | "Rural"
-    indicators: Indicator[]
-}
-
-export type SchoolTable = {
-    id: string
-    code: string
-    name: string
-    local: string
-    adminType: "Federal" | "Estadual" | "Municipal"
-}
-
-export type City = {
-    id: string
-    code: string
-    name: string
-    state: State
-    area: "Capital" | "Interior"
-}
-
-export type State = {
-    id: string
-    code: number
-    name: string
-    uf: string
-    region: "Norte" | "Nordeste" | "Sudeste" | "Sul" | "Centro-Oeste",
-}
-
-export type Indicator = {
-    id: string
-    average: number
-    quantity: number
-    classification: number
-    year: number
-    school: School
-    levelOne: number
-    levelTwo: number
-    levelThree: number
-    levelFour: number
-    levelFive: number
-    levelSix: number
-    levelSeven: number
-    levelEight: number
-}
+import { School } from "@/utils/types"
+import { levelsStrings } from "@/utils/utils"
 
 export const columns: ColumnDef<School>[] = [
     {
@@ -95,16 +38,12 @@ export const columns: ColumnDef<School>[] = [
         cell: ({ row }) => {
 
             const school = row.original
-            console.log('school row:', school)
-
-            // useSWR(`BASE_URL/schools/${school.id}`, )
-
             return (
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button variant="outline">Ver</Button>
+                        <Button className=" bg-blue-600" variant="outline">Ver</Button>
                     </DialogTrigger >
-                    <DialogContent className="sm:max-w-[425px] bg-blue-600 ml-14 content-center ">
+                    <DialogContent className="sm:max-w-[425px] bg-blue-400 ml-14 content-center ">
                         <DialogHeader>
                             <DialogTitle>{school.name}</DialogTitle>
                             <DialogDescription className="">
@@ -135,12 +74,7 @@ export const columns: ColumnDef<School>[] = [
                                         {school.localType}
                                     </Label>
                                 </div>
-
-
-
-
                             </div>
-
                             <div className="">
                                 <Label className="text-right text-lg">
                                     INSE {school.indicators[0]?.year}
@@ -164,7 +98,7 @@ export const columns: ColumnDef<School>[] = [
                             </div>
                             <div className="flex gap-16 ">
                                 <Label className="text-right ml-1">
-                                    {school.indicators[0]?.classification}
+                                    {levelsStrings[school.indicators[0]?.classification - 1] ?? "N/A"}
                                 </Label>
                                 <Label className="text-right">
                                     {school.indicators[0]?.average}

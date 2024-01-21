@@ -8,8 +8,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
-    FormField,
     FormItem,
     FormLabel,
     FormMessage,
@@ -46,7 +44,6 @@ export default function SchoolForm() {
         })
     }
 
-    console.log('página do formulário')
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -54,9 +51,6 @@ export default function SchoolForm() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-    }
 
     return (
         <>
@@ -68,7 +62,7 @@ export default function SchoolForm() {
                 VOLTAR
             </Button>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form className="space-y-8">
                     <Label className='text-right text-xl'>
                         Identificação
                     </Label>
@@ -78,9 +72,6 @@ export default function SchoolForm() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Nome da Escola</FormLabel>
-                                {/* <FormDescription>
-                                    Cadastra uma escola e os indicadores
-                                </FormDescription> */}
                                 <FormControl>
                                     <Input placeholder="Nome" {...field} />
                                 </FormControl>
@@ -139,9 +130,6 @@ export default function SchoolForm() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Nome da Escola</FormLabel>
-                                {/* <FormDescription>
-                                    Cadastra uma escola e os indicadores
-                                </FormDescription> */}
                                 <FormControl>
                                     <Input placeholder="Nomo" {...field} />
                                 </FormControl>
@@ -156,9 +144,6 @@ export default function SchoolForm() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Nome da Escola</FormLabel>
-                                {/* <FormDescription>
-                                    Cadastra uma escola e os indicadores
-                                </FormDescription> */}
                                 <FormControl>
                                     <Input placeholder="Nomo" {...field} />
                                 </FormControl>
