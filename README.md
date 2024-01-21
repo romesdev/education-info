@@ -120,7 +120,14 @@ VITE v5.0.12  ready in 1506 ms
 Destaques: 
 - A listagem está páginada (assim como o back-end retorna os resultados por escola de forma paginada).
 - Filtros e buscas: Busca por nome, filtro por Classificação do Indicador de Nível Socioeconômico (I-VIII), busca por cidade, filtro por estado.
-- Ordenação do nome em ASC e DESC.  
+- Ordenação do nome em ASC e DESC.
+
+![image](https://github.com/romesdev/education-info/assets/40067566/b7b59f4b-c81c-402a-8946-5e414bb66347)
+
+
+![image](https://github.com/romesdev/education-info/assets/40067566/a6677d55-a89d-42be-9262-396b8b249831)
+
+
 
 
 
