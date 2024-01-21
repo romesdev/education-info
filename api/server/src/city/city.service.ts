@@ -16,7 +16,6 @@ export class CityService {
   }
 
   findByName(search: string) {
-    console.log(search);
     return this.prisma.city.findMany({
       where: {
         name: {

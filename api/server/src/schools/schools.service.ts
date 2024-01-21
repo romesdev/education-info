@@ -26,8 +26,6 @@ export class SchoolsService {
 
   findWhere(query: FilterDto) {
     const { search, state, city, level, direction, page, perPage } = query;
-    console.log(query);
-    console.log(perPage);
     let where = {};
     let cityWhere = {};
     let indicatorsWhere = {};
@@ -84,15 +82,6 @@ export class SchoolsService {
       };
     }
 
-    // if (orderByKey !== null && orderByValue !== null) {
-    //   orderBy = { [orderByKey]: orderByValue };
-    // }
-
-    console.log('indicators', indicatorsWhere);
-    console.log('where', where);
-
-    // return this.prisma.school.findMany();
-
     return paginate<School, Prisma.SchoolFindManyArgs>(
       this.prisma.school,
       {
@@ -129,8 +118,6 @@ export class SchoolsService {
       },
     });
 
-    console.log(response);
-
     return response;
   }
 
@@ -147,8 +134,6 @@ export class SchoolsService {
         city: true,
       },
     });
-
-    console.log(response);
 
     return response;
   }
@@ -168,13 +153,10 @@ export class SchoolsService {
       },
     });
 
-    console.log(response);
-
     return response;
   }
 
   async findByLevel(level: number) {
-    console.log(level);
     const response = await this.prisma.school.findMany({
       where: {
         indicators: {
@@ -192,8 +174,6 @@ export class SchoolsService {
         city: true,
       },
     });
-
-    console.log(response);
 
     return response;
   }
