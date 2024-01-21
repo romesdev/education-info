@@ -25,6 +25,11 @@ export class CityController {
     return this.cityService.findAll();
   }
 
+  @Get('findByName/:search')
+  findByName(@Param('search') search: string) {
+    return this.cityService.findByName(search);
+  }
+
   @Get('findByCode/:code')
   findByCode(@Param('code') code: string) {
     return this.cityService.findByCode(code);

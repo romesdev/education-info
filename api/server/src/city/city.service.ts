@@ -15,6 +15,18 @@ export class CityService {
     return this.prisma.city.findMany();
   }
 
+  findByName(search: string) {
+    console.log(search);
+    return this.prisma.city.findMany({
+      where: {
+        name: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+    });
+  }
+
   findByCode(code: string) {
     return this.prisma.city.findUnique({
       where: {

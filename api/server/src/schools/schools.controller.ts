@@ -23,13 +23,33 @@ export class SchoolsController {
   }
 
   @Get()
-  findAll(@Query() filterDTO: FilterDto) {
-    return this.schoolsService.findAll(filterDTO);
+  findAll(@Query('take') take: number) {
+    return this.schoolsService.findAll(+take);
+  }
+
+  @Get('filter/')
+  findWhere(@Query() filterDTO: FilterDto) {
+    return 'TODO';
   }
 
   @Get('findByCity/:city')
-  findByCity(@Param(':city') city: string) {
+  findByCity(@Param('city') city: string) {
     return this.schoolsService.findByCity(city);
+  }
+
+  @Get('findByUF/:uf')
+  findByState(@Param('uf') uf: string) {
+    return this.schoolsService.findByUF(uf);
+  }
+
+  @Get('findByName/:name')
+  findByName(@Param('name') name: string) {
+    return this.schoolsService.findByName(name);
+  }
+
+  @Get('findByLevel/:level')
+  findByLevel(@Param('level') level: number) {
+    return this.schoolsService.findByLevel(+level);
   }
 
   @Get(':id')

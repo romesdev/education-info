@@ -12,7 +12,18 @@ export class SchoolsService {
     return this.prisma.school.create({ data: createSchoolDto });
   }
 
-  findAll(query: FilterDto) {
+  findAll(take: number) {
+    return this.prisma.school.findMany({
+      skip: 2,
+      take: take,
+      include: {
+        indicators: true,
+        city: true,
+      },
+    });
+  }
+
+  findWhere(query: FilterDto) {
     const { search, orderByKey, orderByValue, whereByKey, whereByValue } =
       query;
     console.log(query);
@@ -60,6 +71,70 @@ export class SchoolsService {
       },
       include: {
         indicators: true,
+        city: true,
+      },
+    });
+
+    console.log(response);
+
+    return response;
+  }
+
+  async findByName(search: string) {
+    const response = await this.prisma.school.findMany({
+      where: {
+        name: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+      include: {
+        indicators: true,
+        city: true,
+      },
+    });
+
+    console.log(response);
+
+    return response;
+  }
+
+  async findByUF(uf: string) {
+    const response = await this.prisma.school.findMany({
+      where: {
+        city: {
+          state: {
+            uf: uf,
+          },
+        },
+      },
+      include: {
+        indicators: true,
+        city: true,
+      },
+    });
+
+    console.log(response);
+
+    return response;
+  }
+
+  async findByLevel(level: number) {
+    console.log(level);
+    const response = await this.prisma.school.findMany({
+      where: {
+        indicators: {
+          some: {
+            classification: level,
+          },
+        },
+      },
+      include: {
+        indicators: {
+          where: {
+            classification: level,
+          },
+        },
         city: true,
       },
     });
