@@ -1,7 +1,6 @@
 # education-info
 
-
-# Olá, mundo
+# olá, mundo
 
 #### O propósito desse projeto é ofertar uma solução para persistência e apresentação dos dados do [Nível Socioeconômico (Inse) das Escolas](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/nivel-socioeconomico).
 
@@ -9,7 +8,7 @@ Dessa forma, o presente repositório apresenta uma API e uma camada visual atrav
 
 ## API
 
-API apresenta uma organização através de 4 entidades e tabelas, sendo elas: Estado, Cidade, Escolas e Indicadores (INSE). Uma representação visual para essa modelagem da API pode ser vista abaixo na imagem (primeiro rascunho da solução):
+API apresenta uma organização através de 4 entidades e tabelas, sendo elas: Estado, Cidade, Escola e Indicador (INSE). Uma representação visual para essa modelagem da API pode ser vista abaixo na imagem (primeiro rascunho da solução):
 
 ![image](https://github.com/romesdev/education-info/assets/40067566/0a350073-0285-4e49-bb03-300c1d7f0d38)
 
@@ -28,12 +27,7 @@ Tecnologias utilizadas na API:
 ```
 cd /api/server/
 ```
-2. Configure uma instância do PostgreSQL com o Docker (obrigatório para uso): 
-
-```
-docker-compose up
-```
-Verifique se está rodando em seu terminal.
+2. Configure uma instância do PostgreSQL com o Docker (obrigatório para uso):
 
 ```yml
 //docker-compose.yml file
@@ -54,12 +48,21 @@ services:
 volumes:
   postgres:
 ```
+Comando:
+```
+docker-compose up
+```
+
+
+Verifique se está rodando em seu terminal.
+Nota: abra outro terminal na mesma pasta para continuar o processo.
 
 3. Crie um arquivo `.env` como o do exemplo (`.env.example`) e coloque as credencias conforme a instância do banco (ver `docker-compose.yml`):
 
 ```env
 DATABASE_URL="postgresql://myuser:mypassword@localhost:5432/server-db"
 ```
+Nota: pode copiar o conteúdo acima para o arquivo que deve funcionar.
 
 4. Instale as dependências do projeto com o seu gerenciador de pacotes, algo como:
 
@@ -130,6 +133,8 @@ Destaques:
 - A listagem está páginada (assim como o back-end retorna os resultados por escola de forma paginada).
 - Filtros e buscas: Busca por nome, filtro por Classificação do Indicador de Nível Socioeconômico (I-VIII), busca por cidade, filtro por estado.
 - Ordenação por nome em ASC e DESC.
+- A integração do sistema permite que os múltiplos filtros funcionem de forma conjunta.
+- O botão de limpar a busca permite retornar para o estado inicial da listagem ao abrir a tela.
 
 ![image](https://github.com/romesdev/education-info/assets/40067566/b7b59f4b-c81c-402a-8946-5e414bb66347)
 
