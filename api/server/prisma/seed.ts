@@ -381,9 +381,10 @@ async function main() {
   await prisma.state.createMany({
     data: states,
   });
+
   console.log('added state data');
 
-  createData();
+  await createData();
 
   console.log('seed finished');
 }
