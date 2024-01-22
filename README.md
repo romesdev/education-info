@@ -5,11 +5,11 @@
 
 #### O propósito desse projeto é ofertar uma solução para persistência e apresentação dos dados do [Nível Socioeconômico (Inse) das Escolas](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/indicadores-educacionais/nivel-socioeconomico).
 
-## API
-
 Dessa forma, o presente repositório apresenta uma API e uma camada visual através de um front-end web para visualização dos dados. A API foi modelada de forma a persistir de forma estrita os dados presentes no INSE (escolas e indicadores) e os dados relacionados (cidade e munícipio) com um banco relacional.
 
-API apresenta uma organização através de 4 entidades e tabelas, sendo elas: Estado, Cidade, Escolas e Indicadores (INSE). Uma representação visual para essa modelagem da API pode ser vista abaixo na imagem:
+## API
+
+API apresenta uma organização através de 4 entidades e tabelas, sendo elas: Estado, Cidade, Escolas e Indicadores (INSE). Uma representação visual para essa modelagem da API pode ser vista abaixo na imagem (primeiro rascunho da solução):
 
 ![image](https://github.com/romesdev/education-info/assets/40067566/0a350073-0285-4e49-bb03-300c1d7f0d38)
 
@@ -21,7 +21,6 @@ Tecnologias utilizadas na API:
 - Prisma
 - Docker
 - Swagger
-
 
 ### Passos para utilizar a API/Back-end
 
@@ -71,13 +70,15 @@ pnpm install
 5. Popule o banco de dados:
 
 ```
+pnpm prisma migrate dev|reset
 pnpm prisma db seed
 ```
   
-7. Inicie o servidor.
+6. Inicie o servidor.
 
 ```
 pnpm run start:dev
+➜  Local:   http://localhost:3000/
 ```
 
 #### API Documentada com Swagger
@@ -91,6 +92,14 @@ Destaques:
 - Validação dos objetos de transferência.  
 
 ## Front-end/Visualização 
+Tecnologias utilizadas no front-end:
+- TypeScript
+- React.JS
+- Vite
+- React Router
+- swr (data fetching)
+- Shadcn/ui components
+
 ### Passos para utilizar o front-end/visualização
 
 #### Passo ZERO: Esteja com o back-end rodando. 
@@ -120,7 +129,7 @@ VITE v5.0.12  ready in 1506 ms
 Destaques: 
 - A listagem está páginada (assim como o back-end retorna os resultados por escola de forma paginada).
 - Filtros e buscas: Busca por nome, filtro por Classificação do Indicador de Nível Socioeconômico (I-VIII), busca por cidade, filtro por estado.
-- Ordenação do nome em ASC e DESC.
+- Ordenação por nome em ASC e DESC.
 
 ![image](https://github.com/romesdev/education-info/assets/40067566/b7b59f4b-c81c-402a-8946-5e414bb66347)
 
