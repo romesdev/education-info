@@ -12,6 +12,8 @@ API apresenta uma organização através de 4 entidades e tabelas, sendo elas: E
 
 ![image](https://github.com/romesdev/education-info/assets/40067566/0a350073-0285-4e49-bb03-300c1d7f0d38)
 
+Nota: a solução final estabeleceu um relacionamento onde uma escola pode ter múltiplos indicadores que é o caso do mundo real. Dessa forma, a API estaria pronta para persistir e mostrar os indicadores por ano da realização da coleta (normalmente, pela prova periódica do SAEB).
+
 Tecnologias utilizadas na API:
 - Node.JS
 - TypeScript
